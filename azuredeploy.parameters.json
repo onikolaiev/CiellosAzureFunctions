@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workerSize": {
+      "value": "1"
+    },
+    "key_value": {
+      "value": "1619153011111111111"
+    }
+  }
+}
