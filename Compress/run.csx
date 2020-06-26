@@ -29,7 +29,7 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
 
         file.Name = obj.name;
         file.Data = obj.content;
-
+        file.encodeType = obj.encodeType;
 
         var nameOfProperty = "insertIfEmpty";
         var propertyInfo = obj.GetType().GetProperty(nameOfProperty);
@@ -83,7 +83,16 @@ public static byte[] GeneratePackage(List<ArchiveFile> fileList, ILogger log)
                     log.LogInformation($"Processing {virtualFile.Name} file.");
                     var zipFile = archive.CreateEntry(virtualFile.Name + "." + virtualFile.Extension);
 
-                    byte[] array = Encoding.UTF8.GetBytes(virtualFile.Data);
+                    Encoding encoding;
+                    if (virtualFile.encodeType != "" && virtualFile.encodeType != null)
+                    {
+                        encoding = Encoding.GetEncoding(virtualFile.encodeType);
+                    }
+                    else
+                    {
+                        encoding = Encoding.UTF8;
+                    }
+                    byte[] array = encoding.GetBytes(virtualFile.Data);
                     using (var sourceFileStream = new MemoryStream(array))
 
                     using (var zipEntryStream = zipFile.Open())
@@ -106,4 +115,5 @@ public class ArchiveFile
     public string Extension;
     public string Data;
     public bool InsertIfEmpty;
+    public string encodeType = "";
 }
